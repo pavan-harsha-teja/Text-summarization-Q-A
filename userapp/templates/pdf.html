@@ -1,0 +1,56 @@
+{% extends 'base_dashboard.html' %}
+{% load static %}   
+{% block content %}
+
+{% if pdf_path %}
+<!-- PDF Options Section -->
+<div class="container-fluid" style="padding: 80px 0; background: linear-gradient(135deg, #f5f7fa, #c3cfe2);">
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-8" style="text-align: center;">
+                <h2 style="font-weight: 800; color: #333; margin-bottom: 20px;">PDF Uploaded Successfully!</h2>
+                <p style="font-size: 18px; color: #555; margin-bottom: 30px;">
+                    Selected PDF Path: 
+                    <a href="{{ MEDIA_URL }}{{ pdf_path }}" target="_blank" style="font-weight: bold; color: #1d8cf8; text-decoration: underline;">
+                        View PDF
+                    </a>
+                </p>
+                
+                <div class="btn-group" role="group">
+                    <a href="{% url 'summarization' %}" class="btn" style="padding: 15px 30px; font-size: 18px; border-radius: 50px; background: linear-gradient(45deg, #1d8cf8, #3358f4); border: none; color: #fff; transition: background 0.3s ease-in-out;">
+                        <i class="fas fa-file-alt" style="margin-right: 8px;"></i>Summarization
+                    </a>
+                    <a href="{% url 'qa' %}" class="btn" style="padding: 15px 30px; font-size: 18px; border-radius: 50px; background: linear-gradient(45deg, #28a745, #218838); border: none; color: #fff; transition: background 0.3s ease-in-out; margin-left: 20px;">
+                        <i class="fas fa-question-circle" style="margin-right: 8px;"></i>Q &amp; A
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<!-- PDF Upload Section -->
+<div class="container-fluid" style="padding: 80px 0; background: linear-gradient(135deg, #f5f7fa, #c3cfe2);">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 mt-5">
+                <div style="background-color: #fff; padding: 40px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); text-align: center;">
+                    <h2 style="font-weight: 800; color: #333; margin-bottom: 20px;">Upload Your PDF</h2>
+                    <form action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group" style="margin-bottom: 20px;">
+                            <input type="file" name="pdf_file" accept="application/pdf" class="form-control" style="padding: 10px; border-radius: 5px;">
+                        </div>
+                        <button type="submit" class="btn" style="padding: 15px 50px; font-size: 18px; border-radius: 50px; background: linear-gradient(45deg, #1d8cf8, #3358f4); border: none; color: #fff; transition: background 0.3s ease-in-out; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                            <i class="fas fa-upload" style="margin-right: 8px;"></i>Upload PDF
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock content %}

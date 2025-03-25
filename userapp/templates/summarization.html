@@ -1,0 +1,107 @@
+{% extends 'base_dashboard.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .extracted-text-container {
+        max-height: 300px;
+        overflow-y: auto;
+        background: #f8f9fa;
+        border: 1px solid #ddd;
+        padding: 15px;
+        border-radius: 10px;
+        font-size: 16px;
+        color: #333;
+        line-height: 1.6;
+        font-family: Arial, sans-serif;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    /* Custom Scrollbar */
+    .extracted-text-container::-webkit-scrollbar {
+        width: 6px;
+    }
+    .extracted-text-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+    .extracted-text-container::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 10px;
+    }
+    .extracted-text-container::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+</style>
+
+<div class="container mt-5 pt-5 col-7 mx-auto">
+    <h2 class="text-center">Summarization</h2>
+
+    <!-- Language Selection Form -->
+    <form method="POST" action="{% url 'summarization' %}">
+        {% csrf_token %}
+        <div class="form-group mb-4">
+            <label for="language" class="form-label">Select Language:</label>
+            <select name="language" id="language" class="form-control" required>
+                {% for lang in languages %}
+                    <option value="{{ lang }}" {% if lang == selected_language %}selected{% endif %}>
+                        {{ lang }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="text-center mb-4">
+            <button type="submit" class="btn btn-primary" style="padding: 10px 20px;">Generate Summary</button>
+        </div>
+    </form>
+
+    <!-- Button to view extracted text -->
+    <p><strong>Extracted Text:</strong>
+        <a href="#" class="text-primary" data-bs-toggle="modal" data-bs-target="#extractedTextModal">
+            Show Extracted Text From PDF
+        </a>
+    </p>
+
+    <!-- Bootstrap Modal -->
+    <div class="modal fade" id="extractedTextModal" tabindex="-1" aria-labelledby="extractedTextModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="extractedTextModalLabel">Extracted Text</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="extracted-text-container" style="text-align: justify;">
+                        {{ extracted_text }}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if summary %}
+        <div class="mt-4">
+            <p><strong>AI Summary:</strong></p>
+            <div class="extracted-text-container bg-light p-3 rounded">
+                {% if selected_language|lower == "english" and summary.text %}
+                    <p>{{ summary.text }}</p>
+                    <ul>
+                        {% for point in summary.key_points %}
+                            <li>{{ point }}</li>
+                        {% endfor %}
+                    </ul>
+                    <!-- <p class="mt-2">Readability Score: {{ summary.score }}/100</p> -->
+                {% else %}
+                    <p>{{ summary }}</p>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
+    <a href="{% url 'pdf' %}" class="btn btn-primary mt-3">Back</a>
+</div>
+
+{% endblock %}

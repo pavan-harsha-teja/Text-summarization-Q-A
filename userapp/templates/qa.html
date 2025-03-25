@@ -1,0 +1,254 @@
+{% extends 'base_dashboard.html' %}
+
+{% block content %}
+{% load static %}
+
+<!-- Add a form for the Q&A submission. Note the enctype for file upload -->
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <style>
+        .extracted-text-container {
+            max-height: 300px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 16px;
+            color: #333;
+            line-height: 1.6;
+            font-family: Arial, sans-serif;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        /* Custom Scrollbar */
+        .extracted-text-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .extracted-text-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .extracted-text-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        .extracted-text-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        /* Q&A Input/Recording Section */
+        .qa-input-section {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+        .qa-preview-section {
+            display: none;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+        .recording-status,
+        .recording-timer {
+            font-weight: bold;
+            margin-top: 10px;
+            display: none;
+        }
+        .recording-status { color: red; }
+        .recording-timer { color: blue; }
+    </style>
+
+    <div class="container mt-5 pt-5 col-7 mx-auto">
+        <h2 class="text-center">Q&A</h2>
+
+        <!-- Existing Extracted Text Section -->
+        <p><strong>Extracted Text:</strong>
+            <a href="#" class="text-primary" data-bs-toggle="modal" data-bs-target="#extractedTextModal">
+                Show Extracted Text
+            </a>
+        </p>
+        <!-- Bootstrap Modal for Extracted Text -->
+        <div class="modal fade" id="extractedTextModal" tabindex="-1" aria-labelledby="extractedTextModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="extractedTextModalLabel">Extracted Text</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="extracted-text-container" style="text-align: justify;">
+                            {{ extracted_text }}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Q&A Input Section -->
+        <div class="qa-input-section" id="qaInputSection">
+            <input type="text" name="question" id="questionInput" class="form-control mb-3" placeholder="Type your question here..." />
+            <div class="text-center mb-3">
+                <button type="button" id="recordBtn" class="btn btn-danger">
+                    <i class="fas fa-microphone"></i> Record Question
+                </button>
+            </div>
+            <div class="text-center">
+                <span class="recording-status" id="recordingStatus">Recording...</span>
+                <span class="recording-timer" id="recordingTimer">00:00</span>
+            </div>
+            <div class="text-center mt-3">
+                <button type="submit" id="submitTextBtn" class="btn btn-primary">Submit Question (Text)</button>
+            </div>
+            <!-- File input for audio (hidden by default) -->
+            <input type="file" name="audio" id="audioInput" style="display: none;" />
+        </div>
+
+        <!-- Q&A Preview Section (after recording) -->
+        <div class="qa-preview-section" id="qaPreviewSection">
+            <p><strong>Recorded Question Preview:</strong></p>
+            <audio controls id="audioPreview" style="width: 100%;"></audio>
+            <div class="text-center mt-3">
+                <button type="submit" id="submitAudioBtn" class="btn btn-primary">Submit Question (Audio)</button>
+                <button type="button" id="recordAgainBtn" class="btn btn-secondary ms-3">Record Again</button>
+            </div>
+        </div>
+
+        {% if error %}
+        <div class="alert alert-danger mt-3">{{ error }}</div>
+        {% endif %}
+
+        {% if answer %}
+        <div class="answer-section mt-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4>Answer:</h4>
+                <div>
+                    <button type="button" class="speak-button btn btn-link" onclick="speakAnswer()">
+                        <i class="fas fa-volume-up"></i> Speak Answer
+                    </button>
+                    <button type="button" class="stop-speak-button btn btn-link" onclick="stopSpeaking()">
+                        <i class="fas fa-stop"></i> Stop Speaking
+                    </button>
+                </div>
+            </div>
+            <div class="answer-text">{{ answer }}</div>
+        </div>
+        {% endif %}
+
+        <a href="{% url 'pdf' %}" class="btn btn-primary mt-3">Back</a>
+    </div>
+</form>
+
+<!-- Inline JavaScript for Audio Recording & Submission -->
+<script>
+    console.log("Q&A JavaScript loaded");
+    let mediaRecorder;
+    let audioChunks = [];
+    let recordingStartTime;
+    let timerInterval;
+
+    const recordBtn = document.getElementById("recordBtn");
+    const recordingStatus = document.getElementById("recordingStatus");
+    const recordingTimer = document.getElementById("recordingTimer");
+    const qaInputSection = document.getElementById("qaInputSection");
+    const qaPreviewSection = document.getElementById("qaPreviewSection");
+    const audioPreview = document.getElementById("audioPreview");
+    const submitTextBtn = document.getElementById("submitTextBtn");
+    const recordAgainBtn = document.getElementById("recordAgainBtn");
+
+    // Handle audio recording
+    recordBtn.addEventListener("click", function () {
+        console.log("Record button clicked");
+        if (!mediaRecorder || mediaRecorder.state !== "recording") {
+            console.log("Starting audio recording...");
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(stream => {
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+                    mediaRecorder.start();
+                    console.log("MediaRecorder started");
+
+                    recordingStatus.style.display = "block";
+                    recordingTimer.style.display = "block";
+                    recordBtn.textContent = "Stop Recording";
+                    recordBtn.classList.replace("btn-danger", "btn-secondary");
+
+                    recordingStartTime = Date.now();
+                    timerInterval = setInterval(() => {
+                        let elapsedTime = Math.floor((Date.now() - recordingStartTime) / 1000);
+                        let minutes = String(Math.floor(elapsedTime / 60)).padStart(2, '0');
+                        let seconds = String(elapsedTime % 60).padStart(2, '0');
+                        recordingTimer.textContent = `${minutes}:${seconds}`;
+                        console.log("Recording time:", minutes + ":" + seconds);
+                    }, 1000);
+
+                    mediaRecorder.ondataavailable = event => {
+                        audioChunks.push(event.data);
+                        console.log("Audio data available, chunk size:", event.data.size);
+                    };
+
+                    mediaRecorder.onstop = () => {
+                        console.log("MediaRecorder stopped");
+                        clearInterval(timerInterval);
+                        recordingStatus.style.display = "none";
+                        recordingTimer.style.display = "none";
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        console.log("Audio blob created, size:", audioBlob.size);
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        audioPreview.src = audioUrl;
+                        // Hide input section and show preview section
+                        qaInputSection.style.display = "none";
+                        qaPreviewSection.style.display = "block";
+
+                        // Automatically set the audio file input for form submission
+                        const simulatedFile = new File([audioBlob], "recorded_question.webm", { type: "audio/webm" });
+                        const dt = new DataTransfer();
+                        dt.items.add(simulatedFile);
+                        document.getElementById("audioInput").files = dt.files;
+                    };
+                })
+                .catch(error => console.error("Error accessing microphone:", error));
+        } else {
+            console.log("Stopping audio recording...");
+            mediaRecorder.stop();
+            recordBtn.textContent = "Record Again";
+            recordBtn.classList.replace("btn-secondary", "btn-danger");
+        }
+    });
+
+    // Option to record again
+    recordAgainBtn.addEventListener("click", function () {
+        console.log("Record again button clicked");
+        qaPreviewSection.style.display = "none";
+        qaInputSection.style.display = "block";
+    });
+
+    // Text-to-speech for answer
+    function speakAnswer() {
+        const answerText = document.querySelector('.answer-text').textContent;
+        console.log("Speaking answer:", answerText);
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(answerText);
+            utterance.rate = 1.0;
+            utterance.pitch = 1.0;
+            window.speechSynthesis.speak(utterance);
+        } else {
+            alert("Text-to-speech not supported in this browser.");
+        }
+    }
+
+    // Stop speaking function
+    function stopSpeaking() {
+        console.log("Stopping speech synthesis");
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+        }
+    }
+</script>
+
+{% endblock %}

@@ -1,0 +1,241 @@
+{% extends 'base_dashboard.html' %}
+{% load static %}   
+{% block content %}
+
+<!-- Services Start -->
+<div class="container-fluid service py-5">
+    <div class="container py-5 mt-5">
+        <div class="section-title mb-5 wow fadeInUp" data-wow-delay="0.2s">
+            <div class="sub-style">
+                <h4 class="sub-title px-3 mb-0">Our AI-Powered Services</h4>
+            </div>
+            <h1 class="display-3 mb-4">Effortless PDF Summarization & Q&A</h1>
+            <p class="mb-0">
+                Upload your PDFs and let our AI generate concise summaries and answer your queries instantly.
+            </p>
+        </div>
+        <div class="row g-4 justify-content-center">
+            <!-- AI PDF Summarization -->
+            <div class="col-md-6 col-lg-4 col-xl-3 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="service-item rounded">
+                    <div class="service-img rounded-top">
+                        <img src="{% static 'img/img3.avif' %}" class="img-fluid rounded-top" alt="PDF Summarization" style="height: 250px; object-fit: cover; width: 100%;">
+                    </div>
+                    <div class="service-content rounded-bottom bg-light p-4">
+                        <div class="service-content-inner">
+                            <h5 class="mb-4">
+                                <i class="fas fa-file-alt me-3"></i>AI PDF Summarization
+                            </h5>
+                            <p class="mb-4">
+                                Generate key takeaways from lengthy documents in seconds with AI-driven PDF summarization.
+                            </p>
+                            <a href="#" class="btn btn-primary rounded-pill text-white py-2 px-4 mb-2">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- AI-Powered Q&A -->
+            <div class="col-md-6 col-lg-4 col-xl-3 wow fadeInUp" data-wow-delay="0.3s">
+                <div class="service-item rounded">
+                    <div class="service-img rounded-top">
+                        <img src="{% static 'img/img4.avif' %}" class="img-fluid rounded-top" alt="AI Q&A" style="height: 250px; object-fit: cover; width: 100%;">
+                    </div>
+                    <div class="service-content rounded-bottom bg-light p-4">
+                        <div class="service-content-inner">
+                            <h5 class="mb-4">
+                                <i class="fas fa-question-circle me-3"></i>AI-Powered Q&A
+                            </h5>
+                            <p class="mb-4">
+                                Ask questions related to your PDFs and receive precise AI-generated answers instantly.
+                            </p>
+                            <a href="#" class="btn btn-primary rounded-pill text-white py-2 px-4 mb-2">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Text Extraction from PDF -->
+            <div class="col-md-6 col-lg-4 col-xl-3 wow fadeInUp" data-wow-delay="0.5s">
+                <div class="service-item rounded">
+                    <div class="service-img rounded-top">
+                        <img src="{% static 'img/img5.avif' %}" class="img-fluid rounded-top" alt="Text Extraction" style="height: 250px; object-fit: cover; width: 100%;">
+                    </div>
+                    <div class="service-content rounded-bottom bg-light p-4">
+                        <div class="service-content-inner">
+                            <h5 class="mb-4">
+                                <i class="fas fa-file-excel me-3"></i>Text Extraction from PDF
+                            </h5>
+                            <p class="mb-4">
+                                Convert PDFs into editable text for easy modifications and processing.
+                            </p>
+                            <a href="#" class="btn btn-primary rounded-pill text-white py-2 px-4 mb-2">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Keyword Extraction -->
+            <div class="col-md-6 col-lg-4 col-xl-3 wow fadeInUp" data-wow-delay="0.7s">
+                <div class="service-item rounded">
+                    <div class="service-img rounded-top">
+                        <img src="{% static 'img/img6.jpg' %}" class="img-fluid rounded-top" alt="Keyword Extraction" style="height: 250px; object-fit: cover; width: 100%;">
+                    </div>
+                    <div class="service-content rounded-bottom bg-light p-4">
+                        <div class="service-content-inner">
+                            <h5 class="mb-4">
+                                <i class="fas fa-lightbulb me-3"></i>Keyword Extraction
+                            </h5>
+                            <p class="mb-4">
+                                Identify the most important keywords from your PDF for research and indexing.
+                            </p>
+                            <a href="#" class="btn btn-primary rounded-pill text-white py-2 px-4 mb-2">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+            <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.2s">
+                <a class="btn btn-primary rounded-pill text-white py-3 px-5" href="#">Explore More</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Services End -->
+
+
+
+<!-- About Start -->
+<div class="container-fluid about bg-light py-5">
+    <div class="container py-5">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-5 wow fadeInLeft" data-wow-delay="0.2s">
+                <div class="about-img pb-5 ps-5">
+                    <img src="{% static 'img/img7.avif' %}" class="img-fluid rounded w-100" style="object-fit: cover;" alt="Image">
+                   
+                    <div class="about-experience">AI-Powered PDF Summarization</div>
+                </div>
+            </div>
+            <div class="col-lg-7 wow fadeInRight" data-wow-delay="0.4s">
+                <div class="section-title text-start mb-5">
+                    <h4 class="sub-title pe-3 mb-0">About Our Project</h4>
+                    <h1 class="display-3 mb-4">Smart PDF Summarization & Q&A</h1>
+                    <p class="mb-4">
+                        Our platform provides AI-driven PDF summarization and intelligent Q&A capabilities, allowing users to extract key insights from documents effortlessly.
+                    </p>
+                    <div class="mb-4">
+                        <p class="text-secondary">
+                            <i class="fa fa-check text-primary me-2"></i>Instantly generate concise summaries of lengthy PDFs.
+                        </p>
+                        <p class="text-secondary">
+                            <i class="fa fa-check text-primary me-2"></i>Interactive Q&A system to find answers quickly.
+                        </p>
+                        <p class="text-secondary">
+                            <i class="fa fa-check text-primary me-2"></i>AI-based key point extraction for research efficiency.
+                        </p>
+                        <p class="text-secondary">
+                            <i class="fa fa-check text-primary me-2"></i>User-friendly interface with fast processing.
+                        </p>
+                    </div>
+                    <a href="#" class="btn btn-primary rounded-pill text-white py-3 px-5">Discover More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- About End -->
+
+
+<!-- Feature Start -->
+<div class="container-fluid feature py-5">
+    <div class="container py-5">
+        <div class="section-title mb-5 wow fadeInUp" data-wow-delay="0.1s">
+            <div class="sub-style">
+                <h4 class="sub-title px-3 mb-0">Our Key Features</h4>
+            </div>
+            <h1 class="display-3 mb-4">AI-Powered PDF Summarization & Q&A</h1>
+            <p class="mb-0">
+                Extract insights instantly with our AI-driven PDF summarization and interactive Q&A system.
+            </p>
+        </div>
+        <div class="row g-4 justify-content-center">
+            <!-- AI-Powered PDF Summarization -->
+            <div class="col-md-6 col-lg-4 col-xl-3 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="row-cols-1 feature-item p-4">
+                    <div class="col-12">
+                        <div class="feature-icon mb-4">
+                            <div class="p-3 d-inline-flex bg-white rounded">
+                                <i class="fas fa-file-alt fa-4x text-primary"></i>
+                            </div>
+                        </div>
+                        <div class="feature-content d-flex flex-column">
+                            <h5 class="mb-4">Instant Summarization</h5>
+                            <p class="mb-0">
+                                Quickly generate concise summaries from lengthy PDF documents with AI efficiency.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- AI Q&A System -->
+            <div class="col-md-6 col-lg-4 col-xl-3 wow fadeInUp" data-wow-delay="0.3s">
+                <div class="row-cols-1 feature-item p-4">
+                    <div class="col-12">
+                        <div class="feature-icon mb-4">
+                            <div class="p-3 d-inline-flex bg-white rounded">
+                                <i class="fas fa-question-circle fa-4x text-primary"></i>
+                            </div>
+                        </div>
+                        <div class="feature-content d-flex flex-column">
+                            <h5 class="mb-4">Smart Q&A</h5>
+                            <p class="mb-0">
+                                Ask AI-powered questions based on your PDF content and get precise answers instantly.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Key Point Extraction -->
+            <div class="col-md-6 col-lg-4 col-xl-3 wow fadeInUp" data-wow-delay="0.5s">
+                <div class="row-cols-1 feature-item p-4">
+                    <div class="col-12">
+                        <div class="feature-icon mb-4">
+                            <div class="p-3 d-inline-flex bg-white rounded">
+                                <i class="fas fa-lightbulb fa-4x text-primary"></i>
+                            </div>
+                        </div>
+                        <div class="feature-content d-flex flex-column">
+                            <h5 class="mb-4">Key Point Extraction</h5>
+                            <p class="mb-0">
+                                AI extracts the most important insights from PDFs, saving research time.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- User-Friendly Interface -->
+            <div class="col-md-6 col-lg-4 col-xl-3 wow fadeInUp" data-wow-delay="0.7s">
+                <div class="row-cols-1 feature-item p-4">
+                    <div class="col-12">
+                        <div class="feature-icon mb-4">
+                            <div class="p-3 d-inline-flex bg-white rounded">
+                                <i class="fas fa-user fa-4x text-primary"></i>
+                            </div>
+                        </div>
+                        <div class="feature-content d-flex flex-column">
+                            <h5 class="mb-4">Easy to Use</h5>
+                            <p class="mb-0">
+                                Simple and intuitive interface with fast processing and high accuracy.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- More Details Button -->
+            <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.2s">
+                <a href="#" class="btn btn-primary rounded-pill text-white py-3 px-5">More Details</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Feature End -->
+
+{% endblock content %}
